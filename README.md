@@ -1,6 +1,7 @@
 # math_QA
 This repository contains a Huggingface code to finetune any LLM, using QLoRA, on your custom dataset.
 
+Huggingface 🤗 Model -> [adityasihag/math_QA-Mistral-7B-QLoRA-adapter](https://huggingface.co/adityasihag/math_QA-Mistral-7B-QLoRA-adapter)
 
 ## Table of Contents
 
@@ -46,7 +47,7 @@ python inference.py
 ```
 
 ## Results
-refer here:- [HUgginface Model Card](https://huggingface.co/adityasihag/math_QA-Mistral-7B-QLoRA-adapter)
+Refer Model Card:- [Hugginface Model Card](https://huggingface.co/adityasihag/math_QA-Mistral-7B-QLoRA-adapter)
 
 
 ## Contributing

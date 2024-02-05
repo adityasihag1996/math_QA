@@ -9,7 +9,6 @@ This repository contains a Huggingface code to finetune any LLM, using QLoRA, on
 - [Training](#Training)
 - [Inference](#Inference)
 - [Results](#Results)
-- [To-Do](#to-do)
 - [Contributing](#contributing)
 
 ## Installation

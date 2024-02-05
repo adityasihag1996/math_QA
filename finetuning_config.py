@@ -47,8 +47,8 @@ logging_steps = 5   # Log every X updates steps
 # prompt template to be used for finetuning
 IGNORE_INDEX = -100
 template = {
-    "instruction": " ####Question: {instruction}",
-    "response": " ####Answer: {response}",
+    "instruction": "####Question: {instruction}",
+    "response": " ####Answer: {response} ",
 }
 
 

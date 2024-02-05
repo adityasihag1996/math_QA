@@ -1,0 +1,7 @@
+accelerate
+peft
+bitsandbytes
+transformers
+trl
+flash-attn
+tensorboard

@@ -13,7 +13,6 @@ from transformers import (
     BitsAndBytesConfig,
     DataCollatorForSeq2Seq,
     Trainer,
-    Seq2SeqTrainer,
     Seq2SeqTrainingArguments,
 )
 from peft import LoraConfig, get_peft_model
@@ -88,7 +87,8 @@ if __name__ == "__main__":
     dataset = dataset.map(  
                     partial(preprocess_supervised_dataset, max_length = finetuning_config.max_seq_length, train_on_prompt = False),
                     batched = True,
-                    remove_columns = dataset.column_names
+                    remove_columns = dataset.column_names,
+                    num_proc = finetuning_config.NUM_CORES,
                 )
 
     # BitsAndBytes config ( model quantisation config )

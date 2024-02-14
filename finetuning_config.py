@@ -56,7 +56,7 @@ template = {
 max_seq_length = 2048   # Maximum sequence length to use
 packing = False   # Pack multiple short examples in the same input sequence to increase efficiency
 device_map = {"": 0}   # Load the entire model on the GPU 0
-
+NUM_CORES = 10
 
 ## CODE SNIPPET FOR WHEN USING NON-CHAT DATA (WILL ADD SUPPORT LATER)
 # user_prompt_data_key = "question"

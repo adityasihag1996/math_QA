@@ -78,10 +78,10 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained(
                     finetuning_config.base_model,
                     trust_remote_code = True,
+                    padding_side = "right",
                     token = finetuning_config.hf_token,
                 )
     tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"
 
     # tokenize the dataset
     dataset = dataset.map(  
@@ -92,26 +92,34 @@ if __name__ == "__main__":
                 )
 
     # BitsAndBytes config ( model quantisation config )
-    bnb_config = BitsAndBytesConfig(
-                    load_in_8bit = finetuning_config.use_8bit,
-                    load_in_4bit = finetuning_config.use_4bit,
-                    bnb_4bit_quant_type = finetuning_config.bnb_4bit_quant_type,
-                    bnb_4bit_compute_dtype = finetuning_config.bnb_4bit_compute_dtype,
-                    bnb_4bit_use_double_quant = finetuning_config.use_nested_quant,
-                )
+    if finetuning_config.use_4bit:
+        bnb_config = BitsAndBytesConfig(
+                        load_in_8bit = finetuning_config.use_8bit,
+                        load_in_4bit = finetuning_config.use_4bit,
+                        bnb_4bit_quant_type = finetuning_config.bnb_4bit_quant_type,
+                        bnb_4bit_compute_dtype = finetuning_config.bnb_4bit_compute_dtype,
+                        bnb_4bit_use_double_quant = finetuning_config.bnb_4bit_use_double_quant,
+                    )
+    elif finetuning_config.use_8bit:
+        bnb_config = BitsAndBytesConfig(
+                        load_in_8bit = finetuning_config.use_8bit,
+                    )
+    else:
+        assert True, "Set one of 'use_4bit' or 'use_8bit' to True!"
     
     # load base model
     model = AutoModelForCausalLM.from_pretrained(
                 finetuning_config.base_model,
                 quantization_config = bnb_config,
                 device_map = finetuning_config.device_map,
-                attn_implementation = "flash_attention_2",
+                attn_implementation = "flash_attention_2" if finetuning_config.use_flash_attn else "eager",
                 low_cpu_mem_usage = True,
                 token = finetuning_config.hf_token,
             )
     model.gradient_checkpointing_enable(gradient_checkpointing_kwargs = {"use_reentrant": False})
     model.enable_input_require_grads()
     model.config.use_cache = False
+    model.train()
 
     # load LoRA configuration
     lora_config = LoraConfig(
@@ -128,7 +136,7 @@ if __name__ == "__main__":
 
     # for logging purposes
     current_datetime = datetime.now().strftime('%Y-%m-%d-%H-%M')
-    working_dir = f"{finetuning_config.output_dir}{current_datetime}"
+    working_dir = f"{finetuning_config.output_dir}_{current_datetime}"
 
     # set training parameters
     training_arguments = Seq2SeqTrainingArguments(

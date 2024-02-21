@@ -1,5 +1,5 @@
 ## HF model and data params
-base_model = "mistralai/Mistral-7B-v0.1"   # base model HF path
+base_model = ""   # base model HF path
 project_name = ""   # save model as name
 dataset_name = ""  # training dataset HF path
 dataset_text_field = None   # key of data from dataset
@@ -18,11 +18,11 @@ use_4bit = True   # Activate 4-bit precision base model loading
 use_8bit = False   # Activate 8-bit precision base model loading
 bnb_4bit_compute_dtype = "float16"   # Compute dtype for 4-bit base models
 bnb_4bit_quant_type = "nf4"   # Quantization type (fp4 or nf4)
-use_nested_quant = False   # Activate nested quantization for 4-bit base models (double quantization)
+bnb_4bit_use_double_quant = False   # Activate nested quantization for 4-bit base models (double quantization)
 
 
 ## TrainingArguments parameters
-output_dir = f"./results_llm/{project_name}/"   # Output directory where the model predictions and checkpoints will be stored
+output_dir = f"./results_llm/{project_name}"   # Output directory where the model predictions and checkpoints will be stored
 num_train_epochs = 3   # Number of training epochs
 fp16 = True   # Enable fp16/bf16 training
 bf16 = False   # Enable fp16/bf16 training (set bf16 to True with an A100)
@@ -47,8 +47,8 @@ logging_steps = 5   # Log every X updates steps
 # prompt template to be used for finetuning
 IGNORE_INDEX = -100
 template = {
-    "instruction": "####Question: {instruction}",
-    "response": " ####Answer: {response} ",
+    "instruction": "Question: {instruction}",
+    "response": " Answer: {response} ",
 }
 
 
@@ -57,6 +57,8 @@ max_seq_length = 2048   # Maximum sequence length to use
 packing = False   # Pack multiple short examples in the same input sequence to increase efficiency
 device_map = {"": 0}   # Load the entire model on the GPU 0
 NUM_CORES = 10
+use_flash_attn = False
+
 
 ## CODE SNIPPET FOR WHEN USING NON-CHAT DATA (WILL ADD SUPPORT LATER)
 # user_prompt_data_key = "question"

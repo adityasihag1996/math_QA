@@ -28,8 +28,10 @@ sample_input_tokenised = tokenizer(sample_input, return_tensors = "pt").to("cuda
 
 generated_ids = model.generate(
                     **sample_input_tokenised,
-                    max_new_tokens = 1024,
-                    temperature = 0.3
+                    max_new_tokens = 512,
+                    temperature = 0.3,
+                    do_sample = True,
+                    top_p = 0.95,
                 )
 output = tokenizer.decode(generated_ids[0], skip_special_tokens = True)
 print(output)
